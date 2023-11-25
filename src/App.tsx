@@ -11,8 +11,6 @@ const backgroundStyle: React.CSSProperties = {
 };
 
 function App() {
-  const [username, setUsername] = useState(null);
-
   return (
     <div style={backgroundStyle}>
       <Button variant="contained">Home</Button>

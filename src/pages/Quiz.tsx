@@ -1,6 +1,7 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useContext } from "react";
 import Timer from "../components/Timer.jsx";
 import Trivia from "../components/Trivia.jsx";
+import { MyContext } from "../context/MyContext.js";
 
 const mainStyle: React.CSSProperties = {
   width: "75%",
@@ -24,6 +25,7 @@ export default function Quiz() {
   const [timeOut, setTimeOut] = useState(false);
   const [questionNumber, setQuestionNumber] = useState(1);
   const [earned, setEarned] = useState("$ 0");
+  const { userName } = useContext(MyContext);
 
   const data = [
     {

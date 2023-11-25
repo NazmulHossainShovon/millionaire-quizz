@@ -1,5 +1,7 @@
 import { Button } from "@mui/material";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
+import { MyContext } from "../context/MyContext";
+import { useNavigate } from "react-router-dom";
 
 const startStyle: React.CSSProperties = {
   width: "250px",
@@ -25,11 +27,14 @@ const startInput: React.CSSProperties = {
   fontSize: "18px",
 };
 
-export default function Start({ setUsername }) {
-  const inputRef = useRef();
+export default function Start() {
+  const inputRef = useRef<HTMLInputElement>();
+  const { setUserName } = useContext(MyContext);
+  const navigate = useNavigate();
 
   const handleClick = () => {
-    inputRef.current.value && setUsername(inputRef.current.value);
+    inputRef.current.value && setUserName(inputRef.current.value);
+    navigate("/play");
   };
 
   return (
