@@ -34,7 +34,9 @@ export default function Start() {
 
   const handleClick = () => {
     inputRef.current.value && setUserName(inputRef.current.value);
-    navigate("/play");
+    if (inputRef.current.value !== "") {
+      navigate("/play");
+    }
   };
 
   return (
