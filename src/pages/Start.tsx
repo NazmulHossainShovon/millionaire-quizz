@@ -1,5 +1,5 @@
-import { Button } from "@mui/material";
-import { useContext, useRef } from "react";
+import { Alert, Button, Snackbar, SnackbarOrigin } from "@mui/material";
+import React, { useContext, useRef } from "react";
 import { MyContext } from "../context/MyContext";
 import { useNavigate } from "react-router-dom";
 
@@ -27,15 +27,36 @@ const startInput: React.CSSProperties = {
   fontSize: "18px",
 };
 
+interface State extends SnackbarOrigin {
+  open: boolean;
+}
+
 export default function Start() {
   const inputRef = useRef<HTMLInputElement>();
   const { setUserName } = useContext(MyContext);
   const navigate = useNavigate();
+  const [state, setState] = React.useState<State>({
+    open: false,
+    vertical: "top",
+    horizontal: "center",
+  });
+  const { vertical, horizontal, open } = state;
+
+  const handleSnackClick = (newState: SnackbarOrigin) => {
+    console.log("rn");
+    setState({ ...newState, open: true });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
 
   const handleClick = () => {
     inputRef.current.value && setUserName(inputRef.current.value);
     if (inputRef.current.value !== "") {
       navigate("/play");
+    } else {
+      handleSnackClick({ vertical: "top", horizontal: "center" });
     }
   };
 
@@ -45,6 +66,14 @@ export default function Start() {
       <Button variant="outlined" color="error" onClick={handleClick}>
         Start
       </Button>
+      <Snackbar
+        anchorOrigin={{ vertical, horizontal }}
+        open={open}
+        onClose={handleClose}
+        key={vertical + horizontal}
+      >
+        <Alert severity="error">Please enter a valid name!</Alert>
+      </Snackbar>
     </div>
   );
 }
