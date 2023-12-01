@@ -21,6 +21,32 @@ const quizContainerStyle: React.CSSProperties = {
   display: "flex",
 };
 
+const topStyle: React.CSSProperties = {
+  height: "50%",
+  marginTop: "60px",
+  position: "relative",
+};
+
+const timerStyle: React.CSSProperties = {
+  width: "70px",
+  height: "70px",
+  borderRadius: "50%",
+  border: "5px solid white",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "absolute",
+  bottom: "10px",
+  left: "80px",
+  fontSize: "30px",
+  fontWeight: 700,
+};
+
+const bottomStyle: React.CSSProperties = {
+  height: "50%",
+  marginTop: "50px",
+};
+
 export default function Quiz() {
   const [timeOut, setTimeOut] = useState(false);
   const [questionNumber, setQuestionNumber] = useState(1);
@@ -130,15 +156,15 @@ export default function Quiz() {
           <h1 className="endText">You earned: {earned}</h1>
         ) : (
           <>
-            <div className="top">
-              <div className="timer">
+            <div style={topStyle}>
+              <div style={timerStyle}>
                 <Timer
                   setTimeOut={setTimeOut}
                   questionNumber={questionNumber}
                 />
               </div>
             </div>
-            <div className="bottom">
+            <div style={bottomStyle}>
               <Trivia
                 data={data}
                 questionNumber={questionNumber}
