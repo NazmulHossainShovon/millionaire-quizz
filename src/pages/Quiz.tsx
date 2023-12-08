@@ -49,78 +49,17 @@ const bottomStyle: React.CSSProperties = {
 
 export default function Quiz() {
   const [timeOut, setTimeOut] = useState(false);
-  const [questionNumber, setQuestionNumber] = useState(1);
+  const [questionNumber, setQuestionNumber] = useState<number>(0);
   const [earned, setEarned] = useState("$ 0");
   const { userName } = useContext(MyContext);
-
-  const data = [
-    {
-      id: 1,
-      question: "Rolex is a company that specializes in what type of product?",
-      answers: [
-        {
-          text: "Phone",
-          correct: false,
-        },
-        {
-          text: "Watches",
-          correct: true,
-        },
-        {
-          text: "Food",
-          correct: false,
-        },
-        {
-          text: "Cosmetic",
-          correct: false,
-        },
-      ],
-    },
-    {
-      id: 2,
-      question: "When did the website `Facebook` launch?",
-      answers: [
-        {
-          text: "2004",
-          correct: true,
-        },
-        {
-          text: "2005",
-          correct: false,
-        },
-        {
-          text: "2006",
-          correct: false,
-        },
-        {
-          text: "2007",
-          correct: false,
-        },
-      ],
-    },
-    {
-      id: 3,
-      question: "Who played the character of harry potter in movie?",
-      answers: [
-        {
-          text: "Johnny Deep",
-          correct: false,
-        },
-        {
-          text: "Leonardo Di Caprio",
-          correct: false,
-        },
-        {
-          text: "Denzel Washington",
-          correct: false,
-        },
-        {
-          text: "Daniel Red Cliff",
-          correct: true,
-        },
-      ],
-    },
-  ];
+  const [data, setData] = useState([]);
+  const fetchData = async () => {
+    const response = await fetch(
+      "https://opentdb.com/api.php?amount=15&type=multiple"
+    );
+    const questions = await response.json();
+    setData(questions.results);
+  };
 
   const moneyPyramid = useMemo(
     () =>
@@ -148,6 +87,10 @@ export default function Quiz() {
     questionNumber > 1 &&
       setEarned(moneyPyramid.find((m) => m.id === questionNumber - 1).amount);
   }, [questionNumber, moneyPyramid]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <div style={quizContainerStyle}>

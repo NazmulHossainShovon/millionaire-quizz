@@ -43,7 +43,6 @@ export default function Start() {
   const { vertical, horizontal, open } = state;
 
   const handleSnackClick = (newState: SnackbarOrigin) => {
-    console.log("rn");
     setState({ ...newState, open: true });
   };
 
