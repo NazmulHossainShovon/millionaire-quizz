@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useContext } from "react";
 import Timer from "../components/Timer.jsx";
 import Trivia from "../components/Trivia.jsx";
 import { MyContext } from "../context/MyContext.js";
+import { BounceLoader } from "react-spinners";
 
 const mainStyle: React.CSSProperties = {
   width: "75%",
@@ -47,12 +48,21 @@ const bottomStyle: React.CSSProperties = {
   marginTop: "50px",
 };
 
+const loadingContainer: React.CSSProperties = {
+  alignItems: "center",
+  display: "flex",
+  justifyContent: "center",
+  border: "1px solid red",
+  width: "75%",
+};
+
 export default function Quiz() {
   const [timeOut, setTimeOut] = useState(false);
   const [questionNumber, setQuestionNumber] = useState<number>(0);
   const [earned, setEarned] = useState("$ 0");
   const { userName } = useContext(MyContext);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
   const fetchData = async () => {
     const response = await fetch(
       "https://opentdb.com/api.php?amount=15&type=multiple"
@@ -92,32 +102,46 @@ export default function Quiz() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      setLoading(false);
+    }
+  }, [data]);
+
   return (
     <div style={quizContainerStyle}>
-      <div style={mainStyle}>
-        {timeOut ? (
-          <h1 className="endText">You earned: {earned}</h1>
-        ) : (
-          <>
-            <div style={topStyle}>
-              <div style={timerStyle}>
-                <Timer
-                  setTimeOut={setTimeOut}
+      {loading && (
+        <div style={loadingContainer}>
+          <BounceLoader color="#36d7b7" />
+        </div>
+      )}
+      {!loading && (
+        <div style={mainStyle}>
+          {timeOut ? (
+            <h1 className="endText">You earned: {earned}</h1>
+          ) : (
+            <>
+              <div style={topStyle}>
+                <div style={timerStyle}>
+                  <Timer
+                    setTimeOut={setTimeOut}
+                    questionNumber={questionNumber}
+                  />
+                </div>
+              </div>
+              <div style={bottomStyle}>
+                <Trivia
+                  data={data}
                   questionNumber={questionNumber}
+                  setQuestionNumber={setQuestionNumber}
+                  setTimeOut={setTimeOut}
                 />
               </div>
-            </div>
-            <div style={bottomStyle}>
-              <Trivia
-                data={data}
-                questionNumber={questionNumber}
-                setQuestionNumber={setQuestionNumber}
-                setTimeOut={setTimeOut}
-              />
-            </div>
-          </>
-        )}
-      </div>
+            </>
+          )}
+        </div>
+      )}
+
       <div style={pyramidStyle}>
         <ul className="moneyList">
           {moneyPyramid.map((m) => (

@@ -61,7 +61,6 @@ export default function Trivia({
   const [correctAnswer] = useSound(correct);
   const [wrongAnswer] = useSound(wrong);
   const [options, setOptions] = useState<string[]>([]);
-  console.log(data);
 
   function insertAtRandomPosition(str: string, array: string[]) {
     const randomPosition = Math.floor(Math.random() * (array.length + 1));
@@ -85,7 +84,6 @@ export default function Trivia({
         question.incorrect_answers
       );
     }
-
     setOptions(fourOptions);
   }, [question]);
 
@@ -97,19 +95,21 @@ export default function Trivia({
 
   const handleClick = (a) => {};
   return (
-    <div style={triviaStyle}>
-      <div style={questionStyle}>{question?.question}</div>
-      <div style={answersStyle}>
-        {options &&
-          options.map((option) => (
-            <div
-              css={answerStyle}
-              onClick={() => !selectedAnswer && handleClick(a)}
-            >
-              {option}
-            </div>
-          ))}
+    <>
+      <div style={triviaStyle}>
+        <div style={questionStyle}>{question?.question}</div>
+        <div style={answersStyle}>
+          {options &&
+            options.map((option) => (
+              <div
+                css={answerStyle}
+                onClick={() => !selectedAnswer && handleClick(a)}
+              >
+                {option}
+              </div>
+            ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
